@@ -11,6 +11,9 @@ classifier = pipeline("sentiment-analysis", "blanchefort/rubert-base-cased-senti
 @app.get("/")
 def root():
     return {"message": "Hello World"}
+@app.post("/predict/")
+def predict(item: Item):
+    return classifier(item.text)[0]
 # classifier("Я обожаю инженерию машинного обучения!")
 # classifier("Я обожаю собачек!")
 # classifier("Я пытаюсь изучить GitHub!!!")
