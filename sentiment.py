@@ -14,7 +14,7 @@ def root():
 
 @app.post("/predict/")
 def predict(item: Item):
-    return classifier("Я люблю машинное обучение!")[0]
+    return classifier(item.text)[0]
 # classifier("Я обожаю инженерию машинного обучения!")
 # classifier("Я обожаю собачек!")
 # classifier("Я пытаюсь изучить GitHub!!!")
