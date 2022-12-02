@@ -12,11 +12,17 @@ classifier = pipeline("sentiment-analysis", "blanchefort/rubert-base-cased-senti
 def root():
     return {"message": "Тест сервера FastAPI ОК!"}
 
-test_str = "Я обожаю инженерию машинного обучения!"
+test_str1 = "Я обожаю инженерию машинного обучения!"
 
 @app.post("/predict/")
 def predict(item: Item):
-    return classifier(item.test_str)[0]
+    return classifier(item.test_str1)[0]
+
+test_str1 = "Я ненавижу инженерию машинного обучения!"
+
+@app.get("/predict/")
+def predict(item: Item):
+    return classifier(item.test_str2)[0]
 # classifier("Я обожаю инженерию машинного обучения!")
 # classifier("Я обожаю собачек!")
 # classifier("Я пытаюсь изучить GitHub!!!")
