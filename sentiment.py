@@ -5,6 +5,7 @@ from pydantic import BaseModel
 class Item(BaseModel):
     text: str
 
+app = FastAPI()
 classifier = pipeline("sentiment-analysis", "blanchefort/rubert-base-cased-sentiment")
 
 # classifier("Я обожаю инженерию машинного обучения!")
