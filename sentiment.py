@@ -1,7 +1,7 @@
 # Импортируем библиотеки
-from fastapi import FastAPI
-from transformers import pipeline # определяет тональность текста
-from pydantic import BaseModel # получает из HTTP поле text текстового вида
+from fastapi import FastAPI # для работы с сервером FastAPI
+from transformers import pipeline # для определения тональности текста
+from pydantic import BaseModel # для получения из HTTP поле text текстового вида
 
 # Автоматическая установка всех библиотек из файла requirements.txt командой
 # pip install -r requirements.txt
@@ -13,14 +13,13 @@ app = FastAPI() # создаём объект FastAPI
 # Создаём классификатор pipeline для определения тональности текста
 classifier = pipeline("sentiment-analysis", "blanchefort/rubert-base-cased-sentiment")
 
-# Функция, вызываемая при обращении к корневому каталогу сервера с помощью метода GET
-@app.get("/") # декоратор позволяет менять поведение функции, не меняя саму функцию 
-def root():
-    return {"message": "Тест сервера FastAPI ОК!"}
+# Декоратор позволяет менять поведение функции, не меняя саму функцию
+@app.get("/") # обращаемся к корневому каталогу сервера с помощью метода GET
+def root(): # функция, вызываемая при обращении к корневому каталогу сервера
+    return {"message": "Тест сервера FastAPI ОК!"} # тестовое сообщение
 
-# Функция, вызываемая при обращении к каталогу /predict/ с помощью метода POST
-@app.post("/predict/") # декоратор позволяет менять поведение функции, не меняя саму функцию 
-def predict(item: Item):
+@app.post("/predict/") # обращаемся к ссылке /predict/ с помощью метода POST
+def predict(item: Item): # функция, вызываемая при обращении к ссылке /predict/
     return classifier(item.text)[0] # передаём в классификатор текст из тела сообщения
 
 # Запускаем сервер FastAPI командой uvicorn sentiment:app
