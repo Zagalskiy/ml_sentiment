@@ -1,6 +1,5 @@
 from fastapi.testclient import TestClient
 from sentiment import app
-import httpx
 
 client = TestClient(app)
 
