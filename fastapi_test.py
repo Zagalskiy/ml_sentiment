@@ -1,28 +1,33 @@
-from fastapi.testclient import TestClient
-from sentiment import app
+from fastapi.testclient import TestClient # подключаем TestClient — клиент для тестрования API из FastAPI
+from sentiment import app # импортируем объект app класса FastAPI из файла sentiment.py в текущем каталоге
 
+# Создаём клиент для тестирования, которому при создании передается объект API app, тестирование которого необходимо выполнить
 client = TestClient(app)
 
-
+# Создаём функции тестирования, первая проверяет доступность приложения при обращении к корню сервера
 def test_read_main():
-    response = client.get("/")
-    assert response.status_code == 200
-    assert response.json() == {"message": "Тест сервера FastAPI ОК!"}
+    response = client.get("/") # сначала клиент передаёт запрос GET к корню сервера "/" и записывает результат в переменную response
+    assert response.status_code == 200 # затем выполняем 2 теста с помощью оператора assert, 1-й проверяет код ответа HTTP (200 - успешно)
+    assert response.json() == {"message": "Тест сервера FastAPI ОК!"} # 2-й тест проверяет содержание ответа в формате JSON
 
+# Создаём функцию, которая пытается распознать тональность положительной фразы
 def test_predict_positive():
-    response = client.post("/predict/",
-        json={"text": "Я люблю машинное обучение!"}
+    response = client.post("/predict/", # клиент передаёт запрос POST, путь на сервере "/predict/" и записывает результат в переменную response
+        json={"text": "Я люблю машинное обучение!"} # в теле сообщения в формате JSON передаётся сообщение для определения тональности
     )
-    json_data = response.json() 
+    json_data = response.json() # тело ответа из формата JSON сохраняется в словарь json_data для последующего анализа
 
-    assert response.status_code == 200
-    assert json_data['label'] == 'POSITIVE'
+    assert response.status_code == 200 # 1-й тест проверяет доступность приложения, код статуса ответа HTTP должен быть равен 200
+    assert json_data['label'] == 'POSITIVE' # 2-й тест проверяет результат распознавания.
+    # Тональность фразы положительная, поэтому результат определения тональности (ключ 'label' в словаре json_data) должен быть 'POSITIVE'
 
+# Создаём функцию, которая пытается распознать тональность отрицательной фразы
 def test_predict_negative():
-    response = client.post("/predict/",
-        json={"text": "Я ненавижу машинное обучение!"}
+    response = client.post("/predict/", # клиент передаёт запрос POST, путь на сервере "/predict/" и записывает результат в переменную response
+        json={"text": "Я ненавижу машинное обучение!"} # в теле сообщения в формате JSON передаётся сообщение для определения тональности
     )
-    json_data = response.json() 
+    json_data = response.json() # тело ответа из формата JSON сохраняется в словарь json_data для последующего анализа
 
-    assert response.status_code == 200
-    assert json_data['label'] == 'NEGATIVE'
+    assert response.status_code == 200 # 1-й тест проверяет доступность приложения, код статуса ответа HTTP должен быть равен 200
+    assert json_data['label'] == 'NEGATIVE' # 2-й тест проверяет результат распознавания.
+    # Тональность фразы отрицательная, поэтому результат определения тональности (ключ 'label' в словаре json_data) должен быть 'NEGATIVE'
