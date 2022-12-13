@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 from sentiment import app
+import httpx
 
 client = TestClient(app)
 
@@ -7,7 +8,7 @@ client = TestClient(app)
 def test_read_main():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Тест  FastApi сервера ОК!"}
+    assert response.json() == {"message": "Тест сервера FastAPI ОК!"}
 
 def test_predict_positive():
     response = client.post("/predict/",
